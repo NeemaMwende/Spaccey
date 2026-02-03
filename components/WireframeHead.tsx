@@ -9,7 +9,6 @@ export default function WireframeHead() {
   const glowRef = useRef<THREE.Mesh>(null);
   const timeRef = useRef(0);
 
-  // Create custom head geometry by deforming a sphere
   const geometry = useMemo(() => {
     const geo = new THREE.SphereGeometry(1.2, 48, 48);
 
