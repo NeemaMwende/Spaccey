@@ -4,6 +4,9 @@ import bcrypt from "bcrypt";
 import { sql } from "./db";
 
 export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -14,41 +17,52 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        // ✅ fetch user
-        const users =
-          await sql`SELECT * FROM users WHERE email = ${credentials.email}`;
-        const user = users[0];
-        if (!user) return null;
+        const users = await sql`
+          SELECT id, name, email, password_hash
+          FROM users
+          WHERE email = ${credentials.email}
+          LIMIT 1
+        `;
 
-        // ✅ check password
+        if (users.length === 0) return null;
+
+        const user = users[0];
+
         const isValid = await bcrypt.compare(
           credentials.password,
-          user.password,
+          user.password_hash,
         );
-        if (!isValid) return null;
 
-        // ✅ update last login
-        await sql`UPDATE users SET last_login = NOW() WHERE id = ${user.id}`;
+        if (!isValid) return null;
 
         return {
           id: user.id.toString(),
-          email: user.email,
           name: user.name,
-          role: user.role,
+          email: user.email,
         };
       },
     }),
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (user) token.role = user.role;
+      // On initial sign-in
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+      }
       return token;
     },
     async session({ session, token }) {
-      if (session.user && token.role) session.user.role = token.role;
+      if (session.user) {
+        session.user.id = token.id as string;
+        session.user.name = token.name;
+        session.user.email = token.email;
+      }
       return session;
     },
   },
-  pages: { signIn: "/login" },
-  session: { strategy: "jwt" },
+  pages: {
+    signIn: "/login",
+  },
 };
