@@ -32,11 +32,12 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import type { LucideIcon } from "lucide-react";
 
 type MenuItem = {
   id: string;
   label: string;
-  icon: React.ElementType;
+  icon: LucideIcon;
   badge?: string;
 };
 
@@ -579,7 +580,7 @@ function StatsCard({
   title: string;
   value: string;
   change: string;
-  icon: React.ElementType;
+  icon: LucideIcon;
   color: "cyan" | "purple";
 }) {
   const isPositive = change.startsWith("+");
