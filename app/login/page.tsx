@@ -33,7 +33,7 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
-  const [particles, setParticles] = useState<Particle>([]);
+  const [particles, setParticles] = useState<Particle[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -35,7 +35,7 @@ export default function SignupPage() {
     password: "",
     confirmPassword: "",
   });
-  const [particles, setParticles] = useState<Particle>([]);
+  const [particles, setParticles] = useState<Particle[]>([]);
 
   useEffect(() => {
     const generated = Array.from({ length: 20 }).map(() => ({
