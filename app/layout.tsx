@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "Spacey Virtual Era",
@@ -13,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased text-white">{children}</body>
+      <body className="antialiased text-white">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

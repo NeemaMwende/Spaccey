@@ -16,6 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { signIn } from "next-auth/react";
 
 type Particle = {
   x1: number;
@@ -33,7 +34,7 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
-  const [particles, setParticles] = useState<Particle>([]);
+  const [particles, setParticles] = useState<Particle[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,25 +42,23 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+      const result = await signIn("credentials", {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
       });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Invalid email or password");
+      if (result?.error) {
+        setError("Invalid email or password");
         setIsLoading(false);
         return;
       }
 
+      // Successfully logged in - redirect to dashboard
       router.push("/dashboard");
       router.refresh();
     } catch (err) {
       setError("Something went wrong. Please try again.");
-    } finally {
       setIsLoading(false);
     }
   };
