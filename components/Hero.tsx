@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ChevronDown, Instagram } from "lucide-react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 // Dynamically import 3D scene to avoid SSR issues
 const Scene3D = dynamic(() => import("./Scene3D"), {
@@ -85,12 +86,14 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 1 }}
           >
-            <button className="group px-8 py-4 border border-white/20 rounded-md text-white font-medium hover:bg-white/5 transition-all duration-300 flex items-center gap-3">
-              <span>Start Free Trial</span>
-              <div className="w-5 h-5 border border-white/40 rounded-full flex items-center justify-center group-hover:border-cyan-400 transition-colors">
-                <ChevronDown className="w-3 h-3 rotate-[-90deg]" />
-              </div>
-            </button>
+            <Link href="/login">
+              <button className="group px-8 py-4 border border-white/20 rounded-md text-white font-medium hover:bg-white/5 transition-all duration-300 flex items-center gap-3">
+                <span>Start Free Trial</span>
+                <div className="w-5 h-5 border border-white/40 rounded-full flex items-center justify-center group-hover:border-cyan-400 transition-colors">
+                  <ChevronDown className="w-3 h-3 rotate-[-90deg]" />
+                </div>
+              </button>
+            </Link>
           </motion.div>
         </div>
 
